@@ -1,7 +1,6 @@
 # Hubot Health Check
 ====
 
-
 Overview
 
 ## Description
@@ -16,6 +15,7 @@ hubot-health-check
 CoffeeScript
 
 ## Usage
+new healthExamine()
 
 ## Install
 
@@ -23,7 +23,7 @@ CoffeeScript
 
 ## Licence
 
-[MIT](https://github.com/sak39/tool/blob/master/LICENCE)
+[MIT](https://github.com/sak39)
 
 ## Author
 
