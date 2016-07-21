@@ -1,0 +1,30 @@
+{
+  "name": "hubot-site-health-examine",
+  "version": "1.0.0",
+  "description": "This module examines sites you want to check whether these are connected successfully.",
+  "main": "index.coffee",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "script/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/l2tporg/hubot-site-health-examine.git"
+  },
+  "keywords": [
+    "hubot",
+    "site",
+    "health",
+    "examine",
+    "check",
+    "alive"
+  ],
+  "author": "sak39",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/l2tporg/hubot-site-health-examine/issues"
+  },
+  "homepage": "https://github.com/l2tporg/hubot-site-health-examine#readme"
+}
