@@ -1,5 +1,5 @@
 # Description
-#   検査対象のサイトのurl、statusCodeのCRUD処理
+#   監視対象のサイトのリスト
 #
 # Author:
 #   @sak39
