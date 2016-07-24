@@ -50,13 +50,10 @@ module.exports = (robot) ->
     urls = new Urls(robot)
     data = urls.getData()
     for obj, key in data
-      robot.send {room: "bot"}, "#{obj.url} status:  #{obj.status}" #@@
-      #エラーのみ通知
       robot.emit 'healthCheck', {url: obj.url, status: obj.status}
 
   ### Add Urls to check ###
   robot.hear /sc[\s]+add[\s]+(\S+)[\s]+(\d+)$/, (msg) ->
-#    data = robot.brain.get('url') ? [] #２重登録を阻止?
     urls = new Urls(robot)
     data = urls.getData()
     url = msg.match[1]
