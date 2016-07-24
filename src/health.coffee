@@ -1,3 +1,103 @@
+# Description
+#  node-cronで定期実行
+#
+# Author:
+#   @sak39
+#
+# Thanks:
+#   http://qiita.com/hotakasaito/items/03386fe1a68e403f5cb8
+
+cronJob = require('cron').CronJob
+Urls = require('./Urls')
+
 module.exports = (robot) ->
-  robot.router.get '/', (req, res) ->
-    res.send 'OK'
+  ######定期実行#######
+  ###Set interval ###
+  Interval = "1 * * * * *"
+  robot.hear /sc set interval "(.+)"/i, (msg) ->
+    console.log msg.match[1]
+    Interval = msg.match[1]
+    msg.send "Set the job interval \"#{Interval}\""
+    cronjob.start()
+    cronjob.stop()
+
+  robot.hear /sc start job/i, (msg) ->
+    msg.send "Start job.."
+    cronjob.start()
+
+  robot.hear /sc stop job/i, (msg) ->
+    msg.send "Stop job.."
+    cronjob.stop()
+
+  ### cronインスタンス生成###
+  cronjob = new cronJob(
+    cronTime: Interval     # 実行時間 (m h d w m y?) s m h d w m
+    start   : true              # すぐにcronのjobを実行するか
+    timeZone: "Asia/Tokyo"      # タイムゾーン指定
+    onTick  : ->                  # 時間が来た時に実行する処理
+      urls = new Urls(robot)
+      data = urls.getData()
+      for obj in data
+#        robot.send {room: "bot"}, "url: #{obj.url} status: #{obj.status}"
+        #healthCheckイベントの発火
+        robot.emit 'healthCheck', {url: obj.url, status: obj.status}
+  )
+
+  ######コマンド群######
+  ### 自発的なサイトチェック ###
+  robot.hear /sc sites/i, (msg) ->
+    console.log "checking..." #@@
+    urls = new Urls(robot)
+    data = urls.getData()
+    for obj, key in data
+      robot.send {room: "bot"}, "#{obj.url} status:  #{obj.status}" #@@
+      #エラーのみ通知
+      robot.emit 'healthCheck', {url: obj.url, status: obj.status}
+
+  ### Add Urls to check ###
+  robot.hear /sc[\s]+add[\s]+(\S+)[\s]+(\d+)$/, (msg) ->
+#    data = robot.brain.get('url') ? [] #２重登録を阻止?
+    urls = new Urls(robot)
+    data = urls.getData()
+    url = msg.match[1]
+    status = Number(msg.match[2]) #Number型に明示的cast
+    i = { url: url, status: status}
+    if urls.checkConfliction(data, i.url) #重複検査, data内にi.urlが存在していなければtrue
+      data.push i
+      robot.brain.set(key, data)
+      index = urls.searchIndex(data, "#{i.url}")
+      msg.send "added #{index}: #{i.url}, #{i.status}"
+    else
+      msg.send "Such url had already been registered."
+
+  ### Get List of Urls ###
+  robot.hear /sc[\s]+list$/, (msg) ->
+    urls = new Urls(robot)
+    data = urls.getData()
+    message = data.map (i) ->
+        "#{urls.searchIndex(data, i.url)}: #{i.url} #{i.status}"
+      .join '\n'
+    if message
+      msg.send message
+    else
+      msg.send "empty"
+
+  ### Update expected status code ###
+  robot.hear /sc[\s]+update[\s]+(\d+)[\s]+(\d+)$/, (msg) ->
+    urls = new Urls(robot)
+    data = urls.getData()
+    url = msg.match[1]
+    status = Number(msg.match[2]) #Number型に明示的cast
+    if urls.updateSite url, status
+      msg.send "updated #{data[msg.match[1]].url}, #{data[msg.match[1]].status}"
+    else
+      msg.send "error: There are no such registered site."
+
+  ### Remove Url from list ###
+  robot.hear /sc[\s]+remove[\s]+(\d+)$/, (msg) ->
+    urls = new Urls(robot)
+    data = urls.removeSite msg.match[1]
+    if data isnt false
+      msg.send "removed #{data.url}, #{data.status}"
+    else
+      msg.send "error: There are no such registered site."

@@ -13,7 +13,7 @@
 #
 # Thanks:
 #   http://sota1235.hatenablog.com/entry/2015/06/15/001400
-Urls = require('./brainClass')
+Urls = require('./Urls')
 
 module.exports = (robot) ->
   ### 明示的なサイトチェック ###
@@ -24,7 +24,7 @@ module.exports = (robot) ->
     for obj, key in data
       robot.send {room: "bot"}, "#{obj.url} status:  #{obj.status}" #@@
       #エラーのみ通知
-      robot.emit 'healthcheck:url:error2', {url: obj.url, status: obj.status}
+      robot.emit 'healthCheck', {url: obj.url, status: obj.status}
 
   ### Add Function ###
   robot.hear /sc[\s]+add[\s]+(\S+)[\s]+(\d+)$/, (msg) ->
@@ -39,8 +39,6 @@ module.exports = (robot) ->
       robot.brain.set(key, data)
       index = urls.searchIndex(data, "#{i.url}")
       msg.send "added #{index}: #{i.url}, #{i.status}"
-#      robot.logger.info data
-#      robot.logger.info i
     else
       msg.send "Such url had already been registered."
 
