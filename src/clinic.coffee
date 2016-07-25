@@ -15,55 +15,33 @@
 # Thanks:
 #   http://qiita.com/hotakasaito/items/03386fe1a68e403f5cb8
 
-#cronJob = require('cron').CronJob
-Urls = require('./Urls')
+Patients = require('./Patients')
+Doctor = require('./Doctor')
+request = require('request')
 
 module.exports = (robot) ->
-  ######定期実行#######
-  ###Set interval ###
-#  Interval = "1 * * * * *"
-#  robot.hear /she set interval "(.+)"/i, (msg) ->
-#    console.log msg.match[1]
-#    Interval = msg.match[1]
-#    msg.send "Set the job interval \"#{Interval}\""
-#    cronjob.start()
-#    cronjob.stop()
-#
-#  robot.hear /she start job/i, (msg) ->
-#    msg.send "Start job.."
-#    cronjob.start()
-#
-#  robot.hear /she stop job/i, (msg) ->
-#    msg.send "Stop job.."
-#    cronjob.stop()
-
-  ### cronインスタンス生成###
-#  cronjob = new cronJob(
-#    cronTime: Interval     # 実行時間 (m h d w m y?) s m h d w m
-#    start   : true              # すぐにcronのjobを実行するか
-#    timeZone: "Asia/Tokyo"      # タイムゾーン指定
-#    onTick  : ->                  # 時間が来た時に実行する処理
-#      urls = new Urls(robot)
-#      data = urls.getData()
-#      for obj in data
-#        #healthCheckイベントの発火
-#        robot.emit 'healthCheck', {url: obj.url, status: obj.status}
-#  )
-
   ######コマンド群######
   ### 自発的なサイトチェック ###
   robot.hear /she examine/i, (msg) ->
     console.log "examing..." #@@
-    urls = new Urls(robot)
+    urls = new Patients(robot)
     data = urls.getData()
+    doctor = new Doctor #Doctorインスタンス生成
     for obj, key in data
-      resolt = robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}
-      if resolt.status is "ng" #エラー時のみ発言
-        msg.send resolt.discription
+#      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}
+      result = doctor.examine({"url": obj.url, "status": obj.status})
+      console.log(result) #@@
+      #デフォルトではエラー時のみ発言
+      if result.status is "matched"
+        msg.send "#{result.discription}"
+      else if result.status is "unmatched"
+        msg.send "#{result.discription}"
+      else if result.status is "error"
+        msg.send "#{result.discription}"
 
   ### Add Urls to check ###
-  robot.hear /she[\s]+add[\s]+(\S+)[\s]+(\d+)$/, (msg) ->
-    urls = new Urls(robot)
+  robot.hear /she[\s]+add[\s]+(\S+)[\s]+(\d+)$/i, (msg) ->
+    urls = new Patients(robot)
     data = urls.getData()
     url = msg.match[1]
     status = Number(msg.match[2]) #Number型に明示的cast
@@ -77,8 +55,8 @@ module.exports = (robot) ->
       msg.send "Such url had already been registered."
 
   ### Get List of Urls ###
-  robot.hear /she[\s]+list$/, (msg) ->
-    urls = new Urls(robot)
+  robot.hear /she[\s]+list$/i, (msg) ->
+    urls = new Patients(robot)
     data = urls.getData()
     message = data.map (i) ->
         "#{urls.searchIndex(data, i.url)}: #{i.url} #{i.status}"
@@ -89,8 +67,8 @@ module.exports = (robot) ->
       msg.send "empty"
 
   ### Update expected status code ###
-  robot.hear /she[\s]+update[\s]+(\d+)[\s]+(\d+)$/, (msg) ->
-    urls = new Urls(robot)
+  robot.hear /she[\s]+update[\s]+(\d+)[\s]+(\d+)$/i, (msg) ->
+    urls = new Patients(robot)
     data = urls.getData()
     url = msg.match[1]
     status = Number(msg.match[2]) #Number型に明示的cast
@@ -100,8 +78,8 @@ module.exports = (robot) ->
       msg.send "error: There are no such registered site."
 
   ### Remove Url from list ###
-  robot.hear /she[\s]+remove[\s]+(\d+)$/, (msg) ->
-    urls = new Urls(robot)
+  robot.hear /she[\s]+remove[\s]+(\d+)$/i, (msg) ->
+    urls = new Patients(robot)
     data = urls.removeSite msg.match[1]
     if data isnt false
       msg.send "removed #{data.url}, #{data.status}"

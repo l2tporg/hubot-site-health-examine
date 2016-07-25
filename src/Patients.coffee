@@ -9,7 +9,7 @@
 
 _ = require 'lodash'
 
-class Urls
+class Patients
   constructor: (robot) ->
     @robot = robot
     @key = 'sites'
@@ -61,4 +61,4 @@ class Urls
     else
       return true
 
-module.exports = Urls
+module.exports = Patients
