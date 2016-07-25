@@ -1,5 +1,5 @@
 # Hubot Site Health Examine
-===
+====
 
 # Overview
 
@@ -14,15 +14,15 @@ hubot-health-check
 ## Requirement
 CoffeeScript
 
-## Usage
+## Install
 npm install --save hubot-site-health-examine
 
 ## Commands
 [省略可能], <引数>
-[BOT_NAME] add <URL:string> <STATUS_CODE:int> - 検査するサイトを登録
-[BOT_NAME] list - 登録されたサイトをインデックス付きで表示
-[BOT_NAME] update <INDEX:int> <NEW_STATUS_CODE:int> - 登録されたサイトのインデックスと新しいステータスを指定して更新
-[BOT_NAME] remove <INDEX:int> - 登録されたサイトをインデックスを指定して削除
+- [BOT_NAME] add \<URL:string\> \<STATUS_CODE:int\> : 検査するサイトを登録
+- [BOT_NAME] list : 登録されたサイトをインデックス付きで表示
+- [BOT_NAME] update \<INDEX:int\> \<NEW_STATUS_CODE:int\> : 登録されたサイトのインデックスと新しいステータスを指定して更新
+- [BOT_NAME] remove \<INDEX:int\> : 登録されたサイトをインデックスを指定して削除
 
 ## Licence
 
