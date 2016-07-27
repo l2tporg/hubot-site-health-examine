@@ -22,13 +22,15 @@ request = require('request')
 module.exports = (robot) ->
   ######コマンド群######
   ### 自発的なサイトチェック ###
-  robot.hear /she examine/i, (msg) ->
+  robot.hear /she examine (\d\d\d)/i, (msg) ->
     console.log "examing..." #@@
+    #出力内容の選定
+    flag = msg.match[1]
     urls = new Patients(robot)
     data = urls.getData()
     doctor = new Doctor #Doctorインスタンス生成
     for obj, key in data
-#      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}
+#      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
       result = doctor.examine({"url": obj.url, "status": obj.status})
       console.log(result) #@@
       #デフォルトではエラー時のみ発言
