@@ -17,7 +17,6 @@
 
 Patients = require('./Patients')
 Doctor = require('./Doctor')
-request = require('request')
 
 module.exports = (robot) ->
   ######コマンド群######
@@ -30,6 +29,7 @@ module.exports = (robot) ->
     urls = new Patients(robot)
     data = urls.getData()
     doctor = new Doctor #Doctorインスタンス生成
+    result = {}
     for obj, key in data
 #      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
       result = doctor.examine({"url": obj.url, "status": obj.status})
