@@ -4,10 +4,10 @@
 #
 # Commands:
 #  [省略可能], <引数>
-#  [BOT_NAME] add <URL:string> <STATUS_CODE:int> - 検査するサイトを登録
-#  [BOT_NAME] list - 登録されたサイトをインデックス付きで表示
-#  [BOT_NAME] update <INDEX:int> <NEW_STATUS_CODE:int> - 登録されたサイトのインデックスと新しいステータスを指定して更新
-#  [BOT_NAME] remove <INDEX:int> - 登録されたサイトをインデックスを指定して削除
+#  [BOT_NAME] she add <URL:string> <STATUS_CODE:int> - 検査するサイトを登録
+#  [BOT_NAME] she list - 登録されたサイトをインデックス付きで表示
+#  [BOT_NAME] she update <INDEX:int> <NEW_STATUS_CODE:int> - 登録されたサイトのインデックスと新しいステータスを指定して更新
+#  [BOT_NAME] she remove <INDEX:int> - 登録されたサイトをインデックスを指定して削除
 #
 # Author:
 #   @sak39
@@ -34,11 +34,11 @@ module.exports = (robot) ->
 #      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
       result = doctor.examine({"url": obj.url, "status": obj.status})
       console.log(result) #@@
-      if result.status is "matched"
+      if result.status is "error"
+        msg.send "#{result.discription}"
+      else if result.status is "matched"
         msg.send "#{result.discription}"
       else if result.status is "unmatched"
-        msg.send "#{result.discription}"
-      else if result.status is "error"
         msg.send "#{result.discription}"
 
   ### Add Urls to check ###
