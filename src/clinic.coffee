@@ -16,16 +16,25 @@
 #   http://qiita.com/hotakasaito/items/03386fe1a68e403f5cb8
 
 Nurse = require('./Nurse')
+Doctor = require('./Doctor')
 request = require('request')
 
 module.exports = (robot) ->
   ######コマンド群######
   ### 自発的なサイトチェック ###
-  robot.hear /she examine/i, (msg) ->
+  robot.hear /she examine event/i, (msg) ->
     console.log "examing..." #@@
     #出力内容の選定
     flag = [1,1,1] #1st: error, 2nd: success, 3rd: fault
     nurse = new Nurse(robot)
+    data = nurse.getData()
+    robot.emit 'healthExamine', data, flag, msg
+#    for obj, key in data
+#      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
+
+  robot.hear /she examine doctor/i, (msg) ->
+    nurse = new Nurse(robot)
+    doctor = new Doctor()
     data = nurse.getData()
     for obj, key in data
       robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
