@@ -14,24 +14,23 @@ class Doctor
   constructor: () ->
   ###### Modules #######
   # Site health examine function
-  examine: (data) ->
-    options = {
-      url: data.url
-    }
-    message = {}
-    request.get options, (err, res, body) ->
-      ### 以下二つが実行される前にreturnがされる###
-#      console.log(err) #@@
-#      console.log(res.statusCode) #@@
-      if err
-        message = {"status": "error", "statusCode": null, "discription": "ERROR: \"#{data.url}\" Connection fail."}
-#        return message
-      else if res.statusCode is data.status #想定値と一致する時
-        message = {"status": "matched", "statusCode": "#{res.statusCode}", "discription": "SUCCESS: \"#{data.url}\" has been alive :)"}
-#        return message
-      else if res.statusCode isnt data.status #想定値と異なる時
-        message = {"status": "unmatched", "statusCode": "#{res.statusCode}", "discription": "ERROR: \"#{data.url}\" [expect]: \"#{data.status}\", [actual]: \"#{res.statusCode}\""}
-#        return message
-    return message
+  examine: (sites, callback, msg) ->
+    console.log("Doctor: well, I'm examining.") #@@
+    for obj, key in sites
+      site = {"url": obj.url, "status": obj.status}
+      options = {
+        url: site.url
+      }
+      message = {}
+      request.get options, (err, res, body) ->
+        if err
+          message = {"status": "error", "statusCode": null, "discription": "ERROR: \"#{site.url}\" Connection fail."}
+          callback(message, msg)
+        else if res.statusCode is site.status #想定値と一致する時
+          message = {"status": "matched", "statusCode": "#{res.statusCode}", "discription": "SUCCESS: \"#{site.url}\" has been alive :)"}
+          callback(message, msg)
+        else if res.statusCode isnt site.status #想定値と異なる時
+          message = {"status": "unmatched", "statusCode": "#{res.statusCode}", "discription": "ERROR: \"#{site.url}\" [expect]: \"#{site.status}\", [actual]: \"#{res.statusCode}\""}
+          callback(message, msg)
 
 module.exports = Doctor

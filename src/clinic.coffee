@@ -29,15 +29,21 @@ module.exports = (robot) ->
     nurse = new Nurse(robot)
     data = nurse.getData()
     robot.emit 'healthExamine', data, flag, msg
-#    for obj, key in data
-#      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
 
   robot.hear /she examine doctor/i, (msg) ->
     nurse = new Nurse(robot)
     doctor = new Doctor()
     data = nurse.getData()
-    for obj, key in data
-      robot.emit 'healthExamine', {"url": obj.url, "status": obj.status}, flag, msg
+    doctor.examine data, examineCallback, msg
+    
+  ### callback ###
+  examineCallback = (result, msg) ->
+    if result.status is "error"
+      msg.send "#{result.discription}"
+    else if result.status is "matched"
+      msg.send "#{result.discription}"
+    else if result.status is "unmatched"
+      msg.send "#{result.discription}"
 
   ### Add nurse to check ###
   robot.hear /she[\s]+add[\s]+(\S+)[\s]+(\d+)$/i, (msg) ->

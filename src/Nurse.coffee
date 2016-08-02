@@ -15,7 +15,6 @@ class Nurse
     @key = 'sites'
 
   ###### Modules #######
-  # @getData
   getData: ->
     data = @robot.brain.get(@key) ? []
 #    data = robot.brain.get(key) or {} #ハッシュで管理する場合はこちら
@@ -41,7 +40,7 @@ class Nurse
     data[index].status = newStatus
     return true
 
-  #Search Index of HashArray
+  ### Search Index of HashArray ###
   searchIndex: (obj, key) ->
     new_obj = _.map(obj, 'url')
     index = new_obj.indexOf(key)
@@ -50,7 +49,7 @@ class Nurse
     else
       return false
 
-  #Check elements conflisction
+  ### Check elements conflisction ###
   checkConfliction: (obj, key) ->
     if _.findIndex(obj, {url: key}) > -1
       return false
