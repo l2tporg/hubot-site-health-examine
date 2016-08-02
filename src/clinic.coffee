@@ -21,7 +21,7 @@ request = require('request')
 
 module.exports = (robot) ->
   ######コマンド群######
-  ### 自発的なサイトチェック ###
+  ### event発火方式のサイトチェック ###
   robot.hear /she examine event/i, (msg) ->
     console.log "examing..." #@@
     #出力内容の選定
@@ -30,12 +30,12 @@ module.exports = (robot) ->
     data = nurse.getData()
     robot.emit 'healthExamine', data, flag, msg
 
+  ### doctor方式のサイトチェック ###
   robot.hear /she examine doctor/i, (msg) ->
     nurse = new Nurse(robot)
     doctor = new Doctor()
     data = nurse.getData()
     doctor.examine data, examineCallback, msg
-    
   ### callback ###
   examineCallback = (result, msg) ->
     if result.status is "error"
