@@ -9,7 +9,7 @@
 
 _ = require 'lodash'
 
-class Patients
+class Nurse
   constructor: (robot) ->
     @robot = robot
     @key = 'sites'
@@ -17,7 +17,7 @@ class Patients
   ###### Modules #######
   # @getData
   getData: ->
-    data = robot.brain.get(key) ? []
+    data = @robot.brain.get(@key) ? []
 #    data = robot.brain.get(key) or {} #ハッシュで管理する場合はこちら
     return data
 
@@ -27,10 +27,6 @@ class Patients
     ### エラーチェック(範囲外判定) ###
     if index > (_.size(data) - 1)
       return false
-    ###上手くいかない###
-#    if index > (data.length - 1)
-#      console.log data.length
-#      return false
     ### 最後の出力に使う###
     tmp = {url: data[index].url, status: data[index].status} #避難
     ### indexから1つ削除 ###
@@ -61,4 +57,4 @@ class Patients
     else
       return true
 
-module.exports = Patients
+module.exports = Nurse
