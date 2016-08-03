@@ -15,7 +15,7 @@ module.exports = function(robot) {
     /* ###1st: error, 2nd: success, 3rd: fault */
     var flags = [1,1,1];
     list = nurse.getList();
-    robot.emit('healthExamine', list, flags, msg);
+    robot.emit('healthExamine', list, flags);
   });
   
   /* Doctor方式 */
