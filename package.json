@@ -1,6 +1,6 @@
 {
   "name": "hubot-site-health-examine",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "This module examines sites you want to check whether these are connected successfully.",
   "main": "index.js",
   "directories": {
