@@ -71,7 +71,6 @@ var Nurse = (function() {
     };
 
     return Nurse;
-
   })();
 
-  module.exports = Nurse;
+module.exports.Nurse = Nurse;
