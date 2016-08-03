@@ -30,7 +30,6 @@ module.exports = function(robot) {
   /* examine終了後のcallback */
   var examineCallback = function(message, msg) {
     var results = [];
-    console.log(message); //@@
     if (message.status === "error") {
       results.push(msg.send(message.discription));
     } else if (message.status === "matched") {
