@@ -3,10 +3,10 @@ var request = require('request');
 var async = require('async');
 
 function Doctor() {
-  console.log("Doctor: well, I'm exmaming.");
 }
 
 Doctor.prototype.examine = function(sites, callback, msg) {
+  console.log("Doctor: well, I'm examing."); //@@
   var i, len;
   for (i = 0, len = sites.length; i < len; ++i) {
     var obj = sites[i];

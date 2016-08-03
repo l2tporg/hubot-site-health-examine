@@ -3,12 +3,12 @@ var _ = require('lodash');
 
 var Nurse = (function() {
     function Nurse(robot) {
-      console.log("Nurse: I'll go get patients.");
       this.robot = robot;
       this.brainKey = 'sites';
     }
 
     Nurse.prototype.getList = function() {
+      console.log("Nurse: I'll go get patients."); //@@
       var list, ref;
       list = (ref = this.robot.brain.get(this.brainKey)) !== null ? ref : [];
       return list;

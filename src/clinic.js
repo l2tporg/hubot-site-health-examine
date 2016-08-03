@@ -7,19 +7,25 @@ var async = require('async');
 
 module.exports = function(robot) {
   /* 自発的なサイトチェック */
-  robot.hear(/she examine/i, function(msg) {
-    var list, j, len, patient, nurse, doctor;
-    doctor = new Doctor;
+  /* healthExamineイベント方式 */
+  robot.hear(/she examine with event/i, function(msg) {
+    var list, nurse;
+    nurse = new Nurse(robot);
+    /* 出力内容の選定 */
+    /* ###1st: error, 2nd: success, 3rd: fault */
+    var flags = [1,1,1];
+    list = nurse.getList();
+    robot.emit('healthExamine', list, flags, msg);
+  });
+  
+  /* Doctor方式 */
+  robot.hear(/she examine with doctor/i, function(msg) {
+    var list, nurse, doctor;
+    doctor = new Doctor();
     nurse = new Nurse(robot);
     list = nurse.getList();
-    for (j = 0, len = list.length; j < len; ++j) {
-      patient = list[j];
-      //patientsオブジェクトとcallback関数を渡す. msgも一緒に渡してあげる
-      doctor.examine({
-        "url": patient.url,
-        "status": patient.status
-      }, examineCallback, msg);
-    }
+    //監視対象リストとcallback関数とmsgを渡す。
+    doctor.examine(list, examineCallback, msg);
   });
   /* examine終了後のcallback */
   var examineCallback = function(message, msg) {
