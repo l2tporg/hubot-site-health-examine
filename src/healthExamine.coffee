@@ -9,7 +9,7 @@ request = require('request')
 
 module.exports = (robot) ->
   ### Satus Check Event ###
-  robot.on 'healthExamine', (sites, flags, _room="") ->
+  robot.on 'healthExamine', (sites, flags, _room="bot") ->
     console.log(_room) #@@
     for obj, key in sites
       options = {
