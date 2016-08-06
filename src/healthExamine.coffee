@@ -2,12 +2,11 @@
 #   ステータスチェックを行うイベント
 #
 # Commands:
-#  - []:省略可能, <>:引数
-#  [l2-t2] she add <URL:string> <STATUS:int> - 検査するサイトを登録
-#  [l2-t2] she list - 登録されたサイトをインデックス付きで表示
-#  [l2-t2] she update <INDEX:int> <NEW_STATUS:int> - 登録されたサイトのインデックスと新しいステータスを指定して更新
-#  [l2-t2] she remove <INDEX:int> - 登録されたサイトをインデックスを指定して削除
-#  *[l2-t2] she examine - 監視メソッドを自発的に発火
+#  - ():省略可能, <>:引数, []:どちらか一方
+#  (l2-t2) she add <URL:string> <STATUS:int> - 検査するサイトを登録
+#  (l2-t2) she [list|ls] - 登録されたサイトをインデックス付きで表示
+#  (l2-t2) she [update|ud] <INDEX:int> <NEW_STATUS:int> - 登録されたサイトのインデックスと新しいステータスを指定して更新
+#  (l2-t2) she [remove|rm] <INDEX:int> - 登録されたサイトをインデックスを指定して削除
 #
 # Author:
 #   @sak39
