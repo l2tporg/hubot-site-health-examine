@@ -42,7 +42,7 @@ list = nurse.getList()
 ```
 
 #### 2-1. healthExamineイベントを使った方法
-- `robot.emit 'healthExamine', list, flags, msg`
+- `robot.emit 'healthExamine', list, flags, 'ROOM_NAME'`
 - この方法では、渡したflagsの内容に従って、イベント内部であらかじめ設定された発言を行う。
 
 ##### 引数
@@ -51,7 +51,8 @@ list = nurse.getList()
   - 1桁目: エラー時に発言
   - 2桁目: 想定したstatusCodeと実際のstatusCodeが一致した場合に発言
   - 3桁目: 想定したstatusCodeと実際のstatusCodeが不一致の場合に発言
-- msg : `robot.hear`でコールバックに渡された引数。発言処理に必要(`msg.send`)。
+- ROOM_NAME : 指定したチャンネルに対して発言する。デフォルトで"bot"チャンネルに発言する。"bot"チャンネルが存在しない場合はエラーが発生する。
+~- msg : `robot.hear`でコールバックに渡された引数。発言処理に必要(`msg.send`)。~
 
 ##### サンプルコード
 ```coffeescript
@@ -61,7 +62,7 @@ robot.hear /she examine e/i, (msg) ->
   ###1st: error, 2nd: success, 3rd: fault###
   flags = [1,1,1] #すべての場合で発言
   list = nurse.getList()
-  robot.emit 'healthExamine', list, flags, msg
+  robot.emit 'healthExamine', list, flags, 'bot' #botチャンネルに発言
 ```
 
 #### 2-2. Doctorクラスを使った方法
@@ -71,7 +72,7 @@ robot.hear /she examine e/i, (msg) ->
 ##### 引数
 - list : 監視対象のリスト
 - examineCallback : 走査終了後に処理したいメソッド。ここで発言処理などを行う。
-- msg : `robot.hear`でコールバックに渡された引数。発言処理に必要(`msg.send`)。
+- msg : Responseオブジェクト.`robot.hear`でコールバックに渡された引数。発言処理に必要(`msg.send`)。
 
 ##### 戻り値
 - examineメソッド実行後に以下の形の戻り値がresultに渡される
@@ -136,7 +137,7 @@ data = [
 - [BOT_NAME] she update \<INDEX:int\> \<NEW_STATUS_CODE:int\> : 登録されたサイトのインデックスと新しいステータスを指定して更新
 - [BOT_NAME] she remove \<INDEX:int\> : 登録されたサイトをインデックスを指定して削除
 
-### サンプルコマンド
+#### 標準搭載のexamineメソッド発火コマンド
 - [BOT_NAME] she examine with event : eventを使って監視メソッドを実行
 - [BOT_NAME] she examine with doctor : Doctorクラスを使って監視メソッドを実行
 
