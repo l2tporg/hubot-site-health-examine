@@ -5,44 +5,36 @@ var async = require('async');
 function Doctor() {
 }
 
-Doctor.prototype.examine = function(sites, callback, msg) {
+Doctor.prototype.examine = function(site, callback, msg) {
   console.log("Doctor: well, I'm examing."); //@@
-  var i, len;
-  for (i = 0, len = sites.length; i < len; ++i) {
-    var obj = sites[i];
-    var site = {
-      "url": obj.url,
-      "status": obj.status
-    };
-    var options = {
-        url: site.url
-    };
-    var message = {};
-    request.get(options, function(err, res, body) {
-      if (err) {
-        message = {
-          "status": "error",
-          "statusCode": null,
-          "discription": "ERROR: \"" + site.url + "\" Connection fail."
-        };
-        callback(message, msg);
-      } else if (res.statusCode === site.status) {
-        message = {
-          "status": "matched",
-          "statusCode": "" + res.statusCode,
-          "discription": "SUCCESS: \"" + site.url + "\" has been alive :)"
-        };
-        callback(message, msg);
-      } else if (res.statusCode !== site.status) {
-        message = {
-          "status": "unmatched",
-          "statusCode": "" + res.statusCode,
-          "discription": "ERROR: \"" + site.url + "\" [expect]: \"" + site.status + "\", [actual]: \"" + res.statusCode + "\""
-        };
-        callback(message, msg);
-      }
-    });
+  var options = {
+      url: site.url
   };
+  var message = {};
+  request.get(options, function(err, res, body) {
+    if (err) {
+      message = {
+        "status": "error",
+        "statusCode": null,
+        "discription": "ERROR: \"" + site.url + "\" Connection fail."
+      };
+      callback(message, msg);
+    } else if (res.statusCode === site.status) {
+      message = {
+        "status": "matched",
+        "statusCode": "" + res.statusCode,
+        "discription": "SUCCESS: \"" + site.url + "\" has been alive :)"
+      };
+      callback(message, msg);
+    } else if (res.statusCode !== site.status) {
+      message = {
+        "status": "unmatched",
+        "statusCode": "" + res.statusCode,
+        "discription": "ERROR: \"" + site.url + "\" [expect]: \"" + site.status + "\", [actual]: \"" + res.statusCode + "\""
+      };
+      callback(message, msg);
+    }
+  });
 };
 
 module.exports.Doctor = Doctor;
