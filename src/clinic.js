@@ -65,7 +65,7 @@ module.exports = function(robot) {
   });
 
   /* Get List of nurse */
-  robot.hear(/she[\s]+list$/i, function(msg) {
+  robot.hear(/she[\s]+li?st?$/i, function(msg) {
     var list, message, nurse;
     nurse = new Nurse(robot);
     list = nurse.getList();
@@ -80,7 +80,7 @@ module.exports = function(robot) {
   });
 
   /* Update expected status code */
-  robot.hear(/she[\s]+update[\s]+(\d+)[\s]+(\d+)$/i, function(msg) {
+  robot.hear(/she[\s]+up?d(?:ate)?[\s]+(\d+)[\s]+(\d+)$/i, function(msg) {
     var list, status, url, nurse;
     nurse = new Nurse(robot);
     list = nurse.getList();
@@ -94,7 +94,7 @@ module.exports = function(robot) {
   });
 
   /* Remove Url from list */
-  return robot.hear(/she[\s]+remove[\s]+(\d+)$/i, function(msg) {
+  return robot.hear(/she[\s]+re?m(?:ove)?[\s]+(\d+)$/i, function(msg) {
     var list, nurse;
     nurse = new Nurse(robot);
     list = nurse.removeSite(msg.match[1]);
