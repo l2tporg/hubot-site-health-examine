@@ -8,7 +8,7 @@ var async = require('async');
 module.exports = function(robot) {
   /* 自発的なサイトチェック */
   /* healthExamineイベント方式 */
-  robot.hear(/she examine with event/i, function(msg) {
+  robot.hear(/she ex(?:amine)? with e(?:vent)?/i, function(msg) {
     var nurse, flags, list, i, len, site, results=[];
     nurse = new Nurse(robot);
     /* 出力内容の選定 */
@@ -22,7 +22,7 @@ module.exports = function(robot) {
   });
   
   /* Doctor方式 */
-  robot.hear(/she examine with doctor/i, function(msg) {
+  robot.hear(/she ex(?:amine)? with d(?:octor)?/i, function(msg) {
     var list, nurse, doctor, len, i, site;
     doctor = new Doctor();
     nurse = new Nurse(robot);
