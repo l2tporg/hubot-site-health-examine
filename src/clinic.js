@@ -8,45 +8,45 @@ var async = require('async');
 module.exports = function(robot) {
   /* 自発的なサイトチェック */
   /* healthExamineイベント方式 */
-  robot.hear(/she ex(?:amine)? with e(?:vent)?/i, function(msg) {
-    var nurse, flags, list, i, len, site, results=[];
-    nurse = new Nurse(robot);
-    /* 出力内容の選定 */
-    /* ###1st: error, 2nd: success, 3rd: fault */
-    flags = [1,1,1];
-    list = nurse.getList();
-    for (i = 0, len = list.length; i < len; i++) {
-      site = list[i];
-      results.push(robot.emit('healthExamine', site, flags, "bot"));
-    }
-  });
+  // robot.hear(/she ex(?:amine)? with e(?:vent)?/i, function(msg) {
+  //   var nurse, flags, list, i, len, site, results=[];
+  //   nurse = new Nurse(robot);
+  //   /* 出力内容の選定 */
+  //   /* ###1st: error, 2nd: success, 3rd: fault */
+  //   flags = [1,1,1];
+  //   list = nurse.getList();
+  //   for (i = 0, len = list.length; i < len; i++) {
+  //     site = list[i];
+  //     results.push(robot.emit('healthExamine', site, flags, "bot"));
+  //   }
+  // });
   
   /* Doctor方式 */
-  robot.hear(/she ex(?:amine)? with d(?:octor)?/i, function(msg) {
-    var list, nurse, doctor, len, i, site;
-    doctor = new Doctor();
-    nurse = new Nurse(robot);
-    list = nurse.getList();
-    //監視対象リストとcallback関数とmsgを渡す。
-    for(i = 0, len = list.length; i < len; i++) {
-      site = list[i];
-      doctor.examine(site, examineCallback, msg);
-    }
-  });
-  /* examine終了後のcallback */
-  var examineCallback = function(message, msg) {
-    var results = [];
-    if (message.status === "error") {
-      results.push(msg.send(message.discription));
-    } else if (message.status === "matched") {
-      results.push(msg.send(message.discription));
-    } else if (message.status === "unmatched") {
-      results.push(msg.send(message.discription));
-    } else {
-      results.push(void 0);
-    }
-    return results;
-  };
+  // robot.hear(/she ex(?:amine)? with d(?:octor)?/i, function(msg) {
+  //   var list, nurse, doctor, len, i, site;
+  //   doctor = new Doctor();
+  //   nurse = new Nurse(robot);
+  //   list = nurse.getList();
+  //   //監視対象リストとcallback関数とmsgを渡す。
+  //   for(i = 0, len = list.length; i < len; i++) {
+  //     site = list[i];
+  //     doctor.examine(site, examineCallback, msg);
+  //   }
+  // });
+  // /* examine終了後のcallback */
+  // var examineCallback = function(message, msg) {
+  //   var results = [];
+  //   if (message.status === "error") {
+  //     results.push(msg.send(message.discription));
+  //   } else if (message.status === "matched") {
+  //     results.push(msg.send(message.discription));
+  //   } else if (message.status === "unmatched") {
+  //     results.push(msg.send(message.discription));
+  //   } else {
+  //     results.push(void 0);
+  //   }
+  //   return results;
+  // };
 
   /* Add nurse to check */
   robot.hear(/she[\s]+add[\s]+(\S+)[\s]+(\d+)$/i, function(msg) {
