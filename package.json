@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "cron": "^1.1.1",
-    "hubot-site-health-manager": "file:///Users/pncity/git/bot/slack/hubot-site-health-manager",
+    "hubot-site-health-manager": "git+https://github.com/l2tporg/hubot-site-health-manager.git",
     "lodash": "^4.13.1",
     "request": "^2.72.0"
   },
