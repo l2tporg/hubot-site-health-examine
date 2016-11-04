@@ -4,7 +4,7 @@
 # Commands:
 #  * ():省略可能, <>:引数, []:どちらか一方
 #  (l2-t2) she ex|examine - サイト生死検査イベントを発火
-#  (l2-t2) she chflag \d\d\d - サイト生死検査イベントの通知設定を変更. 1st: ERROR時, 2nd: Match時, 3rd: Mismatch時 ... ex)101: エラー発生もしくはステータスコード異常の時に通知
+#  (l2-t2) she chflag \d\d\d - サイト生死検査イベントの通知設定を変更. 1st: ERROR時, 2nd: Match時, 3rd: Mismatch時 ... デフォルト値)101: エラー発生もしくはステータスコード異常の時に通知.
 #  (l2-t2) she cron start - ボットのいるチャンネル内でcronを実行
 #
 # Author:
@@ -19,7 +19,7 @@ cronJob = require('cron').CronJob
 Nurse = require('hubot-site-health-manager').NurseWithRedis
 
 module.exports = (robot) ->
-  flags = [1, 1, 1]
+  flags = [1, 0, 1]
 
   ### flags manager ###
   robot.hear /she chflag (\d\d\d)$/i, (msg) ->
