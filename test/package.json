@@ -1,6 +1,6 @@
 {
   "name": "hubot-site-health-examine",
-  "version": "2.0.0",
+  "version": "1.1.2",
   "description": "This module examines sites you want to check whether these are connected successfully.",
   "main": "index.js",
   "directories": {
@@ -28,7 +28,7 @@
     "sinon-chai": "^2.7.0"
   },
   "scripts": {
-    "test": "npm uninstall hubot-site-health-manager; npm install; grunt test:watch"
+    "test": "npm uninstall hubot-site-health-manager; npm install; grunt test"
   },
   "repository": {
     "type": "git",

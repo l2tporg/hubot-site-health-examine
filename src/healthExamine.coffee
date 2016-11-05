@@ -43,6 +43,7 @@ module.exports = (robot) ->
     Nurse.getListAll key, (err, dataArray) ->
       console.log(dataArray);
       for url, status of dataArray
+        console.log("url: " + url)
         robot.emit 'healthExamine', url, Number(status), flags, key
 
 
@@ -67,9 +68,9 @@ module.exports = (robot) ->
     options = {
       url: _url
     }
-    request.get options, (err, res, body) ->
+    request.get options, (err, res) ->
       if err
-        robot.send {room: _room}, "Error: \"#{_url}\" Connection fail." if flags[0] is 1
+        robot.send {room: _room}, "ERROR: \"#{_url}\" Connection fail." if flags[0] is 1
       else if res.statusCode is _status
         robot.send {room: _room}, "SUCCESS: \"#{_url}\" has been alive :)" if flags[1] is 1
       else if res.statusCode isnt _status #想定値と異なる時のみ通知
