@@ -6,6 +6,7 @@
 #  (l2-t2) she ex|examine - サイト生死検査イベントを発火
 #  (l2-t2) she chflag \d\d\d - サイト生死検査イベントの通知設定を変更. 1st: ERROR時, 2nd: Match時, 3rd: Mismatch時 ... デフォルト値)101: エラー発生もしくはステータスコード異常の時に通知.
 #  (l2-t2) she cron start - ボットのいるチャンネル内でcronを実行
+#  (l2-t2) she cron stop - ボットのいるチャンネル内のcronを停止
 #
 # Author:
 #   @sak39
@@ -17,6 +18,9 @@
 request = require('request')
 cronJob = require('cron').CronJob
 Nurse = require('hubot-site-health-manager').NurseWithRedis
+
+# cronjob objの格納(後からstop()するときとかに参照する用)
+cronJobs = {};
 
 module.exports = (robot) ->
   flags = [1, 0, 1]
@@ -47,9 +51,10 @@ module.exports = (robot) ->
         robot.emit 'healthExamine', url, Number(status), flags, key
 
 
-  ### cron実行 ###
+  ### cron start & store cronjob obj ###
   robot.hear /she cron start$/i, (msg) ->
-    console.log("cron...")
+    console.log("cron start...")
+    msg.send "このチャンネルでcronを開始しました。"
     key = msg.envelope.room
     cronjob = new cronJob(
       cronTime: "1 * * * * *"     # 実行時間 s m h d w m
@@ -61,6 +66,15 @@ module.exports = (robot) ->
           for url, status of dataArray
             robot.emit 'healthExamine', url, Number(status), flags, key
     )
+    cronJobs[key] = cronjob; # cronjob.stop()のためにobjectを保存しておく
+    console.log(cronJobs[key].stop);
+
+  ### cron stop ###
+  robot.hear /she cron stop$/i, (msg) ->
+    console.log("cron stop...")
+    msg.send "このチャンネルのcronを停止しました。"
+    key = msg.envelope.room
+    cronJobs[key].stop();
 
   ### Satus Check Event ###
   robot.on 'healthExamine', (_url, _status, flags, _room) ->
