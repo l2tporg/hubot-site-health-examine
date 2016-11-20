@@ -1,0 +1,28 @@
+language: node_js
+
+node_js:
+- '7'
+- '6.1'
+- '0.12'
+- iojs
+
+services:
+  - redis-server
+cache:
+  directories:
+  - node_modules
+
+sudo: false
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: h6wNSIvAWzbTk2IAvUfRXyGG19lZtlPgvWHHfxVGAK+ykQAS3NkNjygm6LjDV+0Pzb3PQT6dtCI9yTkdOd4smAG1bK3y4gNKPZebAxZKsowTOj84At6/YwG5U6fbpPQoi/XuGLiRjG7HMmb/4us+oixdTn9KqLTflbJ/fyBxzBdxNqVj9K0CIl6MJTiDc4bBduwju2+AI1sJp/k/0YhhJOiMfQQ3os/IsJDH6/mMtujecdgGOM8mYXY2RW91v4TvNRuMEjCaSHTuKMyuIExMotcrWdrPCMIq1We5XnssSKSrJcBfvCYle4nHr+gx4uOM38WBGaCJ+OJcBOWRDIU1pHRXst2RVPJRGI1SayXK0ZXbRWO5EOWkAjXc/6Np0qAuEDeFkCBhQyiQ2y/e8Uea4TW1LgtO5bb+CQCBaSNuOmCREjc+R200HU+V3OncYwnFbEMo7m1tZ3G2Ao6j3UeyzBbgW269MKSKzIjUqQfd1DXPfP4e4V+dkKVyRJJLOx5mhiRbBXYQomX1pDYQ6JoNmtBAKKpNbdapQCRmnUWU3u84hVqcN4Qp4s0pZiTixKW/nfQos4e5fRcIhmrSKYDqTineNVdlQrBas1BiPy0eMXBDzeSe7IxUnjlRnZ4VHK8759bS5OYNfS9TnBBiMZHolh0vAErRHn02IMpsWGAjvCU=
+
+
+before_install:
+  npm install -g grunt-cli
+install:
+  npm install
+script:
+  grunt test

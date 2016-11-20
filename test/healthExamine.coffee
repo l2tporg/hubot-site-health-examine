@@ -23,14 +23,14 @@ describe 'siteCheck', ->
     @room.user.say('alice', '@hubot she cron start').then =>
       expect(@room.messages).to.eql [
         ['alice', '@hubot she cron start']
-        ['hubot', '']
+        ['hubot', 'このチャンネルでcronを開始しました。']
       ]
 
   it 'responds when she cron stop', ->
     @room.user.say('alice', '@hubot she cron stop').then =>
       expect(@room.messages).to.eql [
         ['alice', '@hubot she cron stop']
-        ['hubot', '']
+        ['hubot', 'このチャンネルのcronを停止しました。']
       ]
 
 #
