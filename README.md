@@ -1,17 +1,15 @@
 # Hubot Site Health Examine
-====
-
-# Overview
 
 ## Description
 - hubotに載せてあげてください。
-- 登録したurlの生死状態を監視し、想定したステータスコードと返却値が異なる時にエラーメッセージを発言します。
+- [Hubot-Site-Health-Manager](https://github.com/l2tporg/hubot-site-health-manger)も合わせてご利用ください。
+- 登録したurlの生死状態を監視し、想定したステータスコードと返却値が異なる時にエラーメッセージを発言します。(設定によって一致時にもメッセージを発言できます)
 - ボットを招待したチャネルに対してのみ、ボットは監視情報を発言します。
 
 ## Features
 - hubot-site-health-examineで提供する機能は以下のとおり
 1. 監視したいサイトのURLリストのCRUD管理 -> CRUD, Commandsの項目を参照
-2. 監視したいサイトを走査する監視メソッドを実行(healthExamineイベントと、Doctorクラスのいずれかで実行可能) -> Usage, Examine Methodの項目を参照
+2. 監視したいサイトを走査する監視メソッドを実行(healthExamineイベント) -> Usage, Examine Methodの項目を参照
 
 ## Requirement
 CoffeeScript
