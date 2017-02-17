@@ -42,12 +42,12 @@ module.exports = (robot) ->
   ### 状態を表示する ###
   robot.hear /she status$/i, (msg) ->
     key = msg.envelope.room
+
     msg.send("flags: #{flags}")
-    if cronJobs[key]?
+    if cronJobs[key]? and cronJobs[key].running is true
       msg.send("cron: started")
     else
       msg.send("cron: stopped")
-
 
   ### 検査メソッドを自発的に発火 ###
   robot.hear /she ex(?:amine)?$/i, (msg) ->

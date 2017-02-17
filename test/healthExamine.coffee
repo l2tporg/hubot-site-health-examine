@@ -21,13 +21,13 @@ describe 'siteCheck', ->
 #      ]
 #
   ### cron ###
-#  it 'responds when she cron start', ->
-#    @room.user.say('alice', '@hubot she cron start').then =>
-#      expect(@room.messages).to.eql [
-#        ['alice', '@hubot she cron start']
-#        ['hubot', '']
-#      ]
-#
+  it 'responds when she cron start', ->
+    @room.user.say('alice', '@hubot she cron start').then =>
+      expect(@room.messages).to.eql [
+        ['alice', '@hubot she cron start']
+        ['hubot', 'このチャンネルでcronを開始しました。']
+      ]
+
 #  it 'responds when she cron stop', ->
 #    @room.user.say('alice', '@hubot she cron stop').then =>
 #      expect(@room.messages).to.eql [
@@ -48,7 +48,8 @@ describe 'siteCheck', ->
     @room.user.say('alice', '@hubot she status').then =>
       expect(@room.messages).to.eql [
         ['alice', '@hubot she status']
-        ['hubot', '']
+        ['hubot', 'flags: 1,0,1']
+        ['hubot', 'cron: started']
       ]
 
   ### she ex ###
