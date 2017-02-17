@@ -1,7 +1,4 @@
 # Hubot Site Health Examine
-====
-
-# Overview
 
 ## Description
 - hubotに載せてあげてください。
@@ -132,15 +129,8 @@ data = [
 ## Commands
 
 #### []:省略可能, <>:引数
-- [BOT_NAME] she add \<URL:string\> \<STATUS_CODE:int\> : 検査するサイトを登録
-- [BOT_NAME] she list : 登録されたサイトをインデックス付きで表示
-- [BOT_NAME] she update \<INDEX:int\> \<NEW_STATUS_CODE:int\> : 登録されたサイトのインデックスと新しいステータスを指定して更新
-- [BOT_NAME] she remove \<INDEX:int\> : 登録されたサイトをインデックスを指定して削除
-
 #### 標準搭載のexamineメソッド発火コマンド
-- [BOT_NAME] she examine with event : eventを使って監視メソッドを実行
-- [BOT_NAME] she examine with doctor : Doctorクラスを使って監視メソッドを実行
-
+- `[BOT_NAME] she examine|ex` : 監視メソッドを実行
 ## Licence
 
 [MIT](https://github.com/sak39)

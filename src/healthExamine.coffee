@@ -3,10 +3,11 @@
 #
 # Commands:
 #  * ():省略可能, <>:引数, []:どちらか一方
-#  (l2-t2) she ex|examine - サイト生死検査イベントを発火
-#  (l2-t2) she chflag \d\d\d - サイト生死検査イベントの通知設定を変更. 1st: ERROR時, 2nd: Match時, 3rd: Mismatch時 ... デフォルト値)101: エラー発生もしくはステータスコード異常の時に通知.
-#  (l2-t2) she cron start - ボットのいるチャンネル内でcronを実行
-#  (l2-t2) she cron stop - ボットのいるチャンネル内のcronを停止
+#  (l2-t2) she ex|examine - サイト生死検査イベントを発火します。
+#  (l2-t2) she chflag \d\d\d - サイト生死検査イベントの通知設定を変更します。 1st: ERROR時, 2nd: Match時, 3rd: Mismatch時 ... デフォルト値)101: エラー発生もしくはステータスコード異常の時に通知します.
+#  (l2-t2) she cron start - ボットのいるチャンネル内でcronを実行します
+#  (l2-t2) she cron stop - ボットのいるチャンネル内のcronを停止します
+#  (l2-t2) she status - ボットの状態(検査flagの状態、cronの稼働状態)を教えてくれます
 #
 # Author:
 #   @sak39
@@ -37,6 +38,15 @@ module.exports = (robot) ->
     flags = _flags
     console.log("flag: " + flags)
     msg.send("chflag SUCCESS: #{flags}")
+
+  ### 状態を表示する ###
+  robot.hear /she status$/i, (msg) ->
+    key = msg.envelope.room
+    msg.send("flags: #{flags}")
+    if cronJobs[key]?
+      msg.send("cron: started")
+    else
+      msg.send("cron: stopped")
 
 
   ### 検査メソッドを自発的に発火 ###
