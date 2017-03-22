@@ -21,7 +21,8 @@ cronJob = require('cron').CronJob
 Nurse = require('hubot-site-health-manager').NurseWithRedis
 
 # cronjob objの格納(後からstop()するときとかに参照する用)
-cronJobs = {};
+console.log(cronJobs) #@@
+cronJobs = {}
 
 module.exports = (robot) ->
   flags = [1, 0, 1]
@@ -39,7 +40,7 @@ module.exports = (robot) ->
     console.log("flag: " + flags)
     msg.send("chflag SUCCESS: #{flags}")
 
-  ### 状態を表示する ###
+  ### show status ###
   robot.hear /she status$/i, (msg) ->
     key = msg.envelope.room
 
@@ -76,8 +77,13 @@ module.exports = (robot) ->
           for url, status of dataArray
             robot.emit 'healthExamine', url, Number(status), flags, key
     )
+#    Nurse.addUrl("cronjob", [key, cronjob], msg, (err, res) ->
+#      if (res is 'OK')
+#        msg.send("Adding SUCCES: '" + key + "' " + cronjob)
+#      else if (err)
+#        msg.send("Adding ERROR: " + "Unexpected Error \n" + err)
+#    )
     cronJobs[key] = cronjob; # cronjob.stop()のためにobjectを保存しておく
-    console.log(cronJobs[key].stop);
 
   ### cron stop ###
   robot.hear /she cron stop$/i, (msg) ->
@@ -85,6 +91,16 @@ module.exports = (robot) ->
     msg.send "このチャンネルのcronを停止しました。"
     key = msg.envelope.room
     cronJobs[key].stop();
+
+  ### cron auto start when bot connected to slack ###
+#  do () ->
+#    Nurse.getListAll("cronjob", (err, list) ->
+#      cronJobs = list;
+#      console.log(list);
+#      ### k: envelope name, v: cronjob ###
+#      for k, v of list
+#        v.start();
+#    )
 
   ### Satus Check Event ###
   robot.on 'healthExamine', (_url, _status, flags, _room) ->

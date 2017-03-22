@@ -44,13 +44,13 @@ describe 'siteCheck', ->
 #      ]
 #
   ### she status ###
-  it 'responds to she status', ->
-    @room.user.say('alice', '@hubot she status').then =>
-      expect(@room.messages).to.eql [
-        ['alice', '@hubot she status']
-        ['hubot', 'flags: 1,0,1']
-        ['hubot', 'cron: started']
-      ]
+#  it 'responds to she status', ->
+#    @room.user.say('alice', '@hubot she status').then =>
+#      expect(@room.messages).to.eql [
+#        ['alice', '@hubot she status']
+##        ['hubot', 'flags: 1,0,1']
+##        ['hubot', 'cron: started']
+#      ]
 
   ### she ex ###
 #  it 'responds to she ex', ->
