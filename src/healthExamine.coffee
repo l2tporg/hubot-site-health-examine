@@ -27,6 +27,7 @@ cronJobs = {}
 module.exports = (robot) ->
   flags = [1, 0, 1]
 
+
   ### flags manager ###
   robot.hear /she chflag (\d\d\d)$/i, (msg) ->
     console.log "flag setting" #@@
@@ -62,14 +63,40 @@ module.exports = (robot) ->
         robot.emit 'healthExamine', url, Number(status), flags, key
 
 
-  ### cron start & store cronjob obj ###
+  ### cron ###
+  # cron auto start when bot connected to slack
+  do ->
+    Nurse.getListAll "cronjob", ( err, cronjobs ) ->
+      if err
+        console.error err
+      else
+        for envelope, status of cronjobs
+          # check status
+          if status is 'started'
+            status = true
+          else if status is 'stopped'
+            status = false
+
+          # cron restart
+          cronjob = new cronJob(
+            cronTime: "1 * * * * *"     # 実行時間 s m h d w m
+            start: status              # すぐにcronのjobを実行する
+            timeZone: "Asia/Tokyo"      # タイムゾーン指定
+            onTick: ->                  # 時間が来た時に実行する処理
+              Nurse.getListAll key, (err, dataArray) ->
+                for room, status of dataArray
+                  robot.emit 'healthExamine', room, Number(status), flags, key
+          )
+          # cronjob.stop()のためにobjectを保存しておく
+          cronJobs[ envelope ] = cronjob;
+
+  # cron start
   robot.hear /she cron start$/i, (msg) ->
-    console.log("cron start...")
     msg.send "このチャンネルでcronを開始しました。"
     key = msg.envelope.room
     cronjob = new cronJob(
       cronTime: "1 * * * * *"     # 実行時間 s m h d w m
-      start: true              # すぐにcronのjobを実行するか
+      start: true              # すぐにcronのjobを実行する
       timeZone: "Asia/Tokyo"      # タイムゾーン指定
       onTick: ->                  # 時間が来た時に実行する処理
         console.log("cron...")
@@ -77,30 +104,26 @@ module.exports = (robot) ->
           for url, status of dataArray
             robot.emit 'healthExamine', url, Number(status), flags, key
     )
-#    Nurse.addUrl("cronjob", [key, cronjob], msg, (err, res) ->
-#      if (res is 'OK')
-#        msg.send("Adding SUCCES: '" + key + "' " + cronjob)
-#      else if (err)
-#        msg.send("Adding ERROR: " + "Unexpected Error \n" + err)
-#    )
-    cronJobs[key] = cronjob; # cronjob.stop()のためにobjectを保存しておく
+    Nurse.add "cronjob", key, 'started', ( err, res ) ->
+      if res is 'OK'
+        msg.send("cronJob status: '" + key + "'=" + 'started')
+      else if err?
+        msg.send("ERROR: " + "Cannot change cron change\n", err)
+      # cronjob.stop()のためにobjectを保存しておく
+      cronJobs[key] = cronjob;
 
-  ### cron stop ###
+  # cron stop
   robot.hear /she cron stop$/i, (msg) ->
-    console.log("cron stop...")
     msg.send "このチャンネルのcronを停止しました。"
     key = msg.envelope.room
-    cronJobs[key].stop();
+    Nurse.add "cronjob", key, 'stopped', ( err, res ) ->
+      if res is 'OK'
+        msg.send("cronJob status: '" + key + "'=" + 'stopped')
+        cronJobs[key].stop();
+      else if err?
+        msg.send("ERROR: " + "Cannot change cron change\n", err)
 
-  ### cron auto start when bot connected to slack ###
-#  do () ->
-#    Nurse.getListAll("cronjob", (err, list) ->
-#      cronJobs = list;
-#      console.log(list);
-#      ### k: envelope name, v: cronjob ###
-#      for k, v of list
-#        v.start();
-#    )
+
 
   ### Satus Check Event ###
   robot.on 'healthExamine', (_url, _status, flags, _room) ->

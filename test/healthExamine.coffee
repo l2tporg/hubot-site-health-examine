@@ -35,6 +35,7 @@ describe 'siteCheck', ->
 #        ['hubot', '']
 #      ]
 #
+
   ### chflag ###
 #  it 'responds when she chflag', ->
 #    @room.user.say('alice', '@hubot she chflag 101').then =>
