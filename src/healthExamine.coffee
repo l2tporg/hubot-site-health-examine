@@ -70,6 +70,7 @@ module.exports = (robot) ->
       if err
         console.error err
       else
+        console.dir('Stored cronjobs: ', cronjobs);
         for envelope, status of cronjobs
           # check status
           if status is 'started'
@@ -83,9 +84,9 @@ module.exports = (robot) ->
             start: status              # すぐにcronのjobを実行する
             timeZone: "Asia/Tokyo"      # タイムゾーン指定
             onTick: ->                  # 時間が来た時に実行する処理
-              Nurse.getListAll key, (err, dataArray) ->
+              Nurse.getListAll envelope, (err, dataArray) ->
                 for room, status of dataArray
-                  robot.emit 'healthExamine', room, Number(status), flags, key
+                  robot.emit 'healthExamine', room, Number(status), flags, envelope
           )
           # cronjob.stop()のためにobjectを保存しておく
           cronJobs[ envelope ] = cronjob;

@@ -28,7 +28,7 @@
     "sinon-chai": "^2.7.0"
   },
   "scripts": {
-    "test": "npm uninstall hubot-site-health-manager; npm install; grunt test:watch"
+    "test": "npm uninstall hubot-site-health-manager; npm install;"
   },
   "repository": {
     "type": "git",
